@@ -5,3 +5,9 @@ C:\share_private\Visual Studio Projects\_Published_Samples\DurableSender\Durable
 C:\share_private\Visual Studio Projects\_Published_Samples\DurableSender\DurableSenderLibrary\bin\Debug\Microsoft.ServiceBus.xml
 C:\share_private\Visual Studio Projects\_Published_Samples\DurableSender\DurableSenderLibrary\obj\Debug\DurableClientLibrary.dll
 C:\share_private\Visual Studio Projects\_Published_Samples\DurableSender\DurableSenderLibrary\obj\Debug\DurableClientLibrary.pdb
+D:\GitHub\DurableSender\DurableSenderLibrary\bin\Debug\DurableClientLibrary.dll
+D:\GitHub\DurableSender\DurableSenderLibrary\bin\Debug\DurableClientLibrary.pdb
+D:\GitHub\DurableSender\DurableSenderLibrary\obj\Debug\DurableClientLibrary.dll
+D:\GitHub\DurableSender\DurableSenderLibrary\obj\Debug\DurableClientLibrary.pdb
+D:\GitHub\DurableSender\DurableSenderLibrary\bin\Debug\Microsoft.WindowsAzure.Configuration.dll
+D:\GitHub\DurableSender\DurableSenderLibrary\bin\Debug\Microsoft.WindowsAzure.Configuration.xml

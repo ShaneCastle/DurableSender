@@ -160,18 +160,18 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
         // Print the Service Bus message.
         public static void PrintBrokeredMessage(BrokeredMessage msg)
         {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("Received message:");
-                Console.WriteLine("   Label:    " + msg.Label);
-                Console.WriteLine("   Body:     " + msg.GetBody<string>());
-                Console.WriteLine("   Sent at:  " + msg.EnqueuedTimeUtc);
-                Console.WriteLine("   ID:       " + msg.MessageId);
-                Console.WriteLine("   SeqNum:   " + msg.SequenceNumber);
-                foreach (KeyValuePair<string, object> p in msg.Properties)
-                {
-                    Console.WriteLine("   Property: " + p.Key.ToString() + " = " + p.Value.ToString());
-                }
-                Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Received message:");
+            Console.WriteLine("   Label:    " + msg.Label);
+            Console.WriteLine("   Body:     " + msg.GetBody<string>());
+            Console.WriteLine("   Sent at:  " + msg.EnqueuedTimeUtc);
+            Console.WriteLine("   ID:       " + msg.MessageId);
+            Console.WriteLine("   SeqNum:   " + msg.SequenceNumber);
+            foreach (KeyValuePair<string, object> p in msg.Properties)
+            {
+                Console.WriteLine("   Property: " + p.Key.ToString() + " = " + p.Value.ToString());
+            }
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
     }
 }

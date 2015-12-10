@@ -31,7 +31,7 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
 
             // Inject a permanent fault. This simulates a scenario in which Service Bus
             // cannot handle the message (e.g., queue does not exist). This fault causes the durable sender to remove
-            // the message from the MSMQ send queue and move it into the MSMQ sned deadletter queue.
+            // the message from the MSMQ send queue and move it into the MSMQ send dead-letter queue.
             if (active && beforeSendingMessageCount == -1) // Don't simulate any permanent failures.
             {
                 throw (new InvalidOperationException("Fault injector simulates a permanent Service Bus error"));

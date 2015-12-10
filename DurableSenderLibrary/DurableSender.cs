@@ -160,7 +160,7 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
                 // FOR TESTING PURPOSE ONLY: Inject Service Bus error. 
                 faultInjector.InjectFaultBeforeSendingMessageToServiceBus();
 
-                this.queueClient.Send(sbusMessage); // Use synchonous send to preserve message ordering.
+                this.queueClient.Send(sbusMessage); // Use synchronous send to preserve message ordering.
 
                 // FOR TESTING PURPOSE ONLY: Inject Service Bus error. 
                 faultInjector.InjectFaultAfterSendingMessageToServiceBus();
