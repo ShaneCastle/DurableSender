@@ -1,21 +1,20 @@
 ﻿//---------------------------------------------------------------------------------
-// Microsoft (R)  Windows Azure Platform AppFabric SDK
-// Software Development Kit
-// 
-// Copyright (c) Microsoft Corporation. All rights reserved.  
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Copyright (c) Shane Castle - shane.castle@vaultic.com
 //
 // THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, 
 // EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES 
 // OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE. 
 //---------------------------------------------------------------------------------
 
-namespace Microsoft.ServiceBus.Samples.DurableSender
+namespace DurableSenderSample
 {
+    using Microsoft.ServiceBus;
+    using Microsoft.ServiceBus.Messaging;
     using System;
     using System.Collections.Generic;
     using System.Data.SqlClient;
     using System.Transactions;
-    using Microsoft.ServiceBus.Messaging;
 
     class Client
     {
@@ -23,6 +22,21 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
         private const string SqlConnectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=SBGatewayDatabase;Integrated Security=true";
 
         public static void Main()
+        {
+            try
+            {
+                RunSample();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Exception: {0}\nDetails:\n{1}", ex.Message, ex);                
+            }
+
+            Console.WriteLine("Press any key to continue...");
+            Console.ReadKey();
+        }
+
+        private static void RunSample()
         {
             string serviceBusNamespace = "YOUR-NAMESPACE";
             string sasKeyName = "RootManageSharedAccessKey";
