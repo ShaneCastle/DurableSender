@@ -1,0 +1,7 @@
+C:\share_private\Visual Studio Projects\_Published_Samples\DurableSender\DurableSenderLibrary\obj\Debug\DurableSenderLibrary.csprojResolveAssemblyReference.cache
+C:\share_private\Visual Studio Projects\_Published_Samples\DurableSender\DurableSenderLibrary\bin\Debug\DurableClientLibrary.dll
+C:\share_private\Visual Studio Projects\_Published_Samples\DurableSender\DurableSenderLibrary\bin\Debug\DurableClientLibrary.pdb
+C:\share_private\Visual Studio Projects\_Published_Samples\DurableSender\DurableSenderLibrary\bin\Debug\Microsoft.ServiceBus.dll
+C:\share_private\Visual Studio Projects\_Published_Samples\DurableSender\DurableSenderLibrary\bin\Debug\Microsoft.ServiceBus.xml
+C:\share_private\Visual Studio Projects\_Published_Samples\DurableSender\DurableSenderLibrary\obj\Debug\DurableClientLibrary.dll
+C:\share_private\Visual Studio Projects\_Published_Samples\DurableSender\DurableSenderLibrary\obj\Debug\DurableClientLibrary.pdb
