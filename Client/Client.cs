@@ -37,6 +37,7 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
             NamespaceManager namespaceManager = new NamespaceManager(namespaceUri, tokenProvider);
             QueueDescription queueDescription = new QueueDescription(SbusQueueName);
             queueDescription.RequiresDuplicateDetection = true;
+
             if (!namespaceManager.QueueExists(SbusQueueName))
             {
                 namespaceManager.CreateQueue(queueDescription);
@@ -47,19 +48,59 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
             MessagingFactory messagingFactory = MessagingFactory.Create(namespaceUri, tokenProvider);
 
             // Create a durable sender.
-            DurableSender durableSender = new DurableSender(messagingFactory, SbusQueueName);
+            using (DurableSender durableSender = new DurableSender(messagingFactory, SbusQueueName))
+            {
 
-            /*
-            ** Send messages.
-            */
+                // Send messages.
+                SendExample1(durableSender);
+                SendExample2(durableSender);
+                SendExample3(durableSender);
+            }
 
+            // Receive messages.            
+            ReceiveExample1(messagingFactory);
+
+            messagingFactory.Close();
+            namespaceManager.DeleteQueue(SbusQueueName);
+        }
+
+        private static void ReceiveExample1(MessagingFactory messagingFactory)
+        {
+            QueueClient queueClient = messagingFactory.CreateQueueClient(SbusQueueName, ReceiveMode.ReceiveAndDelete);
+            for (int i = 1; i <= 4; i++)
+            {
+                try
+                {
+                    BrokeredMessage message = queueClient.Receive();
+                    if (message != null)
+                    {
+                        PrintBrokeredMessage(message);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Receiver: " + ex.Message);
+                }
+            }
+
+            // Cleanup
+            Console.WriteLine("\nPress ENTER to exit\n");
+            Console.ReadLine();
+            queueClient.Close();
+        }
+
+        private static void SendExample1(DurableSender durableSender)
+        {
             // Example 1:
             // Send a message outside a transaction scope. If a transactional MSMQ send queue
             // is used, (Transactional = true) an internal MSMQ transaction is created.
             BrokeredMessage nonTxMsg = CreateBrokeredMessage(1);
             Console.WriteLine("Sending message {0} outside of a transaction.", nonTxMsg.Label);
             durableSender.Send(nonTxMsg);
+        }
 
+        private static void SendExample2(DurableSender durableSender)
+        {
             // Example 2:
             // Send a message inside a transaction scope.
             BrokeredMessage txMsg = CreateBrokeredMessage(2);
@@ -69,7 +110,10 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
                 durableSender.Send(txMsg);
                 scope.Complete();
             }
+        }
 
+        private static void SendExample3(DurableSender durableSender)
+        {
             // Example 3:
             // Send two messages inside a transaction scope. If another resource manager is used
             // (e.g., SQL server), the transaction is automatically promoted to a distributed
@@ -110,64 +154,33 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
                     Console.WriteLine("Sender: " + ex.Message);
                 }
             }
-
-            /*
-            ** Receive messages.
-            */
-
-            QueueClient queueClient = messagingFactory.CreateQueueClient(SbusQueueName, ReceiveMode.ReceiveAndDelete);
-            for (int i = 1; i <= 4; i++)
-            {
-                try
-                {
-                    BrokeredMessage msg = queueClient.Receive();
-                    if (msg != null)
-                    {
-                        PrintBrokeredMessage(msg);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Receiver: " + ex.Message);
-                }
-            }
-
-            /*
-            ** Cleanup
-            */
-
-            Console.WriteLine("\nPress ENTER to exit\n");
-            Console.ReadLine();
-
-            durableSender.Dispose();
-            queueClient.Close();
-            messagingFactory.Close();
-            namespaceManager.DeleteQueue(SbusQueueName);
         }
 
         // Create a new Service Bus message.
         public static BrokeredMessage CreateBrokeredMessage(int i)
         {
             // Create a Service Bus message.
-            BrokeredMessage msg = new BrokeredMessage("This is the body of message " + i.ToString());
-            msg.Properties.Add("Priority", 1);
-            msg.Properties.Add("Importance", "High");
-            msg.Label = "M" + i.ToString();
-            msg.TimeToLive = TimeSpan.FromSeconds(90);
-            return msg;
+            BrokeredMessage message = new BrokeredMessage("This is the body of message " + i.ToString());
+            message.Properties.Add("Priority", 1);
+            message.Properties.Add("Importance", "High");
+            message.Label = "M" + i.ToString();
+            message.TimeToLive = TimeSpan.FromSeconds(90);
+
+            return message;
         }
 
         // Print the Service Bus message.
-        public static void PrintBrokeredMessage(BrokeredMessage msg)
+        public static void PrintBrokeredMessage(BrokeredMessage message)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("Received message:");
-            Console.WriteLine("   Label:    " + msg.Label);
-            Console.WriteLine("   Body:     " + msg.GetBody<string>());
-            Console.WriteLine("   Sent at:  " + msg.EnqueuedTimeUtc);
-            Console.WriteLine("   ID:       " + msg.MessageId);
-            Console.WriteLine("   SeqNum:   " + msg.SequenceNumber);
-            foreach (KeyValuePair<string, object> p in msg.Properties)
+            Console.WriteLine("   Label:    " + message.Label);
+            Console.WriteLine("   Body:     " + message.GetBody<string>());
+            Console.WriteLine("   Sent at:  " + message.EnqueuedTimeUtc);
+            Console.WriteLine("   ID:       " + message.MessageId);
+            Console.WriteLine("   SeqNum:   " + message.SequenceNumber);
+
+            foreach (KeyValuePair<string, object> p in message.Properties)
             {
                 Console.WriteLine("   Property: " + p.Key.ToString() + " = " + p.Value.ToString());
             }

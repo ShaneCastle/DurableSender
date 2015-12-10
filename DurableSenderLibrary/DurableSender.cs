@@ -34,7 +34,7 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
         // FOR TESTING PURPOSE ONLY.
         FaultInjector faultInjector;
 
-        enum SendResult {Success, WaitAndRetry, PermanentFailure};
+        enum SendResult { Success, WaitAndRetry, PermanentFailure };
 
         public DurableSender(MessagingFactory messagingFactory, string sbusQueueName)
         {
@@ -48,7 +48,7 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
             this.msmqQueueName = MsmqHelper.CreateMsmqQueueName(sbusQueueName, "SEND");
             this.msmqQueue = MsmqHelper.GetMsmqQueue(this.msmqQueueName);
 
-            // Create MSMQ deadletter queue if it doesn't exit. If it does, open the existing MSMQ deadletter queue.
+            // Create MSMQ dead-letter queue if it doesn't exit. If it does, open the existing MSMQ dead-letter queue.
             this.msmqDeadletterQueueName = MsmqHelper.CreateMsmqQueueName(sbusQueueName, "SEND_DEADLETTER");
             this.msmqDeadletterQueue = MsmqHelper.GetMsmqQueue(this.msmqDeadletterQueueName);
 
@@ -113,7 +113,7 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
             if (msmqMessage != null)
             {
                 BrokeredMessage sbusMessage = MsmqHelper.UnpackSbusMessageFromMsmqMessage(msmqMessage);
-                // Clone Service Bus message in case we need to deadletter it.
+                // Clone Service Bus message in case we need to dead-letter it.
                 BrokeredMessage sbusDeadletterMessage = CloneBrokeredMessage(sbusMessage);
 
                 Console.WriteLine("DurableSender: Enqueue message {0} into Service Bus.", msmqMessage.Label);
@@ -127,8 +127,8 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
                         Console.WriteLine("DurableSender: Service Bus is temporarily unavailable.");
                         waitAfterErrorTimer = new Timer(ResumeSendingMessagesToServiceBus, null, WaitTimeAfterServiceBusReturnsAnIntermittentErrorInSeconds * 1000, Timeout.Infinite);
                         break;
-                    case SendResult.PermanentFailure: // Permanent error. Deadletter MSMQ message.
-                        Console.WriteLine("DurableSender: Permanent error when sending message to Service Bus. Deadletter message.");
+                    case SendResult.PermanentFailure: // Permanent error. Dead-letter MSMQ message.
+                        Console.WriteLine("DurableSender: Permanent error when sending message to Service Bus. Dead-letter message.");
                         Message msmqDeadletterMessage = MsmqHelper.PackSbusMessageIntoMsmqMessage(sbusDeadletterMessage);
                         try
                         {
@@ -136,7 +136,7 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
                         }
                         catch (Exception ex)
                         {
-                            Console.WriteLine("DurableSender: Failure when sending message {0} to deadletter queue {1}: {2} {3}",
+                            Console.WriteLine("DurableSender: Failure when sending message {0} to dead-letter queue {1}: {2} {3}",
                                 msmqDeadletterMessage.Label, msmqDeadletterQueue.FormatName, ex.GetType(), ex.Message);
                         }
                         this.msmqQueue.BeginReceive(TimeSpan.FromSeconds(60), null, MsmqOnReceiveComplete);
@@ -151,7 +151,7 @@ namespace Microsoft.ServiceBus.Samples.DurableSender
             Console.WriteLine("DurableSender: MSMQ receive operation completed.");
             MsmqPeekBegin();
         }
-        
+
         // Send message to Service Bus.
         SendResult SendMessageToServiceBus(BrokeredMessage sbusMessage)
         {
